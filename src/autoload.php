@@ -1,8 +1,8 @@
 <?php
 /**
- * ================================================
+ * ================================================================
  * SATORI Forms Autoloader
- * ================================================
+ * ================================================================
  */
 
 declare(strict_types=1);
@@ -11,7 +11,7 @@ spl_autoload_register(function (string $class): void {
     $prefix = 'Satori\\Forms\\';
     $baseDir = __DIR__ . '/';
 
-    if (!str_starts_with($class, $prefix)) {
+    if (strpos($class, $prefix) !== 0) {
         return;
     }
 
