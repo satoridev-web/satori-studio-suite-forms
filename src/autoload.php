@@ -11,7 +11,7 @@ spl_autoload_register(function (string $class): void {
     $prefix = 'Satori\\Forms\\';
     $baseDir = __DIR__ . '/';
 
-    if (strpos($class, $prefix) !== 0) {
+    if (0 !== strpos($class, $prefix)) {
         return;
     }
 
