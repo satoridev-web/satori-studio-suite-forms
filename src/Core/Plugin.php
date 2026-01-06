@@ -11,8 +11,13 @@ namespace Satori\Forms\Core;
 
 final class Plugin
 {
+    private FormCPT $formCpt;
+    private FormSchema $formSchema;
+
     public function __construct()
     {
+        $this->formCpt = new FormCPT();
+        $this->formSchema = new FormSchema();
     }
 
     public function register_hooks(): void
@@ -22,5 +27,7 @@ final class Plugin
 
     public function initialize(): void
     {
+        $this->formCpt->register_hooks();
+        $this->formSchema->register_hooks();
     }
 }
