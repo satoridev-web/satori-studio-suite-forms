@@ -43,7 +43,10 @@ final class SubmissionRepository
             return null;
         }
 
-        return (int) $wpdb->insert_id;
+        $submissionId = (int) $wpdb->insert_id;
+        do_action('satori_forms_submission_stored', $submissionId, $formId, $data, $timestamp);
+
+        return $submissionId;
     }
 
     private function sanitize_ip(?string $ipAddress): ?string

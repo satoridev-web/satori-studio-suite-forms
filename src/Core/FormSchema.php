@@ -14,6 +14,8 @@ use WP_Post;
 final class FormSchema
 {
     public const META_KEY = 'satori_form_schema';
+    public const NONCE_ACTION = 'satori_form_admin_save';
+    public const NONCE_FIELD = 'satori_form_admin_nonce';
     private const SCHEMA_VERSION = 1;
     private const SUPPORTED_FIELD_TYPES = [
         'text',
@@ -103,6 +105,11 @@ final class FormSchema
             return;
         }
 
+        $nonce = filter_input(INPUT_POST, self::NONCE_FIELD, FILTER_UNSAFE_RAW);
+        if (!is_string($nonce) || !wp_verify_nonce($nonce, self::NONCE_ACTION)) {
+            return;
+        }
+
         $rawSchema = filter_input(INPUT_POST, self::META_KEY, FILTER_UNSAFE_RAW);
         if ($rawSchema === null) {
             return;
@@ -122,6 +129,8 @@ final class FormSchema
                 ['response' => 400]
             );
         }
+
+        $this->merge_notifications($schema);
 
         $error = '';
         if (!$this->validate_schema($schema, $error)) {
@@ -151,6 +160,50 @@ final class FormSchema
         }
 
         return $decoded;
+    }
+
+    private function merge_notifications(array &$schema): void
+    {
+        $notifications = $this->sanitize_notifications();
+
+        if ($notifications === null) {
+            if (isset($schema['settings']['notifications'])) {
+                unset($schema['settings']['notifications']);
+            }
+            return;
+        }
+
+        if (!isset($schema['settings']) || !is_array($schema['settings'])) {
+            $schema['settings'] = [];
+        }
+
+        $schema['settings']['notifications'] = $notifications;
+    }
+
+    private function sanitize_notifications(): ?array
+    {
+        $enabled = filter_input(INPUT_POST, 'satori_form_notification_enabled', FILTER_VALIDATE_BOOLEAN);
+        $enabled = (bool) $enabled;
+
+        $to = filter_input(INPUT_POST, 'satori_form_notification_to', FILTER_UNSAFE_RAW);
+        $to = is_string($to) ? sanitize_email(wp_unslash($to)) : '';
+
+        $subject = filter_input(INPUT_POST, 'satori_form_notification_subject', FILTER_UNSAFE_RAW);
+        $subject = is_string($subject) ? sanitize_text_field(wp_unslash($subject)) : '';
+
+        $message = filter_input(INPUT_POST, 'satori_form_notification_message', FILTER_UNSAFE_RAW);
+        $message = is_string($message) ? sanitize_textarea_field(wp_unslash($message)) : '';
+
+        if (!$enabled && $to === '' && $subject === '' && $message === '') {
+            return null;
+        }
+
+        return [
+            'enabled' => $enabled,
+            'to' => $to,
+            'subject' => $subject,
+            'message' => $message,
+        ];
     }
 
     private function validate_schema(array $schema, string &$error): bool
