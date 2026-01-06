@@ -25,5 +25,10 @@ define('SATORI_FORMS_PATH', __DIR__ . '/');
 
 require_once SATORI_FORMS_PATH . 'src/autoload.php';
 
+register_activation_hook(
+    __FILE__,
+    [Satori\Forms\Core\SubmissionTable::class, 'activate']
+);
+
 $plugin = new Satori\Forms\Core\Plugin();
 $plugin->register_hooks();
