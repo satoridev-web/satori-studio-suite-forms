@@ -29,6 +29,10 @@ register_activation_hook(
     __FILE__,
     [Satori\Forms\Core\SubmissionTable::class, 'activate']
 );
+register_activation_hook(
+    __FILE__,
+    [Satori\Forms\Admin\AdminNotices::class, 'mark_activation_notice']
+);
 
 $plugin = new Satori\Forms\Core\Plugin();
 $plugin->register_hooks();
