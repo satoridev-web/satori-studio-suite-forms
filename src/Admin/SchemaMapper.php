@@ -83,6 +83,7 @@ final class SchemaMapper
         $notifications = $this->build_notifications($postId);
 
         if ($fields === [] && $notifications === null) {
+            delete_post_meta($postId, FormSchema::META_KEY);
             return;
         }
 
