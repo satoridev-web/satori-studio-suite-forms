@@ -20,6 +20,13 @@ SATORI Forms is a **standalone-first domain system** that will later integrate w
 - Progressive convergence with SATORI Platform
 - ACF Free may be used as an admin convenience, not a runtime dependency
 
+### Admin UX & Optional Dependencies
+
+- Third-party admin UI tools may be used as optional schema editors
+- Such tools are never bundled or vendored
+- Such tools are not required at runtime
+- Assisted install may be offered at plugin activation for onboarding convenience
+
 ---
 
 ## Reused Authoritative Standards

@@ -86,6 +86,15 @@ Any feature not required for a **minimal, reliable forms engine** is out of scop
 
 ---
 
+### Admin Tooling Boundary
+
+- Admin tools may be assisted-installed
+- Admin tools do not define or enforce the data model
+- The Forms engine remains the sole system of record
+- Admin tools must be fully replaceable without engine changes
+
+---
+
 ## 5. Integration Policy (Future Phases)
 
 SATORI Forms may integrate with other SATORI products in later phases.
