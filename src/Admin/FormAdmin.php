@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Satori\Forms\Admin;
 
+use Satori\Forms\Core\FormCPT;
 use Satori\Forms\Core\FormSchema;
 use WP_Post;
 
